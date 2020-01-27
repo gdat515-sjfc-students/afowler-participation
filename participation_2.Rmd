@@ -1,0 +1,76 @@
+---
+title: "participation_2"
+author: "AJ Fowler"
+date: "1/27/2020"
+output: 
+  md_document:
+    variant: markdown_github
+---
+```{r setup, include=FALSE, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+c("ggplot2",
+  "tibble",
+  "tidyr",
+  "readr",    
+  "purrr",
+  "dplyr",
+  "stringr",
+  "forcats",
+  "gapminder"      
+  ) -> package_names  
+for(package_name in package_names) {
+  if(!is.element(package_name, installed.packages()[,1])) {
+     install.packages(package_name,
+                      repos = "http://cran.mtu.edu/")
+  }
+  library(package_name, character.only=TRUE,
+          quietly=TRUE,verbose=FALSE)
+}
+
+rm(list=c("package_name", "package_names")) 
+
+options(show.signif.stars = FALSE)  
+```
+
+```{r data}
+view(gapminder)
+```
+
+```{r basic ggplot}
+ggplot(data = gapminder) +
+  geom_point(mapping = aes(x = pop, y = lifeExp))
+```
+
+```{r aestheic color option}
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp, colour = continent, size = pop))+
+  geom_point() 
+```
+
+```{r faceting}
+ggplot(data = gapminder) +
+  geom_point(mapping = aes(x = pop, y = lifeExp)) +
+  facet_wrap(~  continent, nrow = 2)
+```
+
+```{r smoothed line}
+ggplot(data = gapminder) +
+  geom_smooth(mapping = aes(x = pop, y = lifeExp))
+```
+
+```{r flipping coordinate system}
+ggplot(data = gapminder, mapping = aes(x = continent, y = lifeExp))+
+  stat_summary(fun.ymin = min, 
+               fun.ymax = max, 
+               fun.y = median,
+               alpha = .9) +
+  geom_point() + 
+  coord_flip() 
+```
+
+```{r log scale}
+ggplot(data = gapminder, aes(x = gdpPercap, y = lifeExp))+
+  geom_point() +
+  scale_x_log10() 
+
+```
