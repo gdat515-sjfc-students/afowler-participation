@@ -1,0 +1,56 @@
+---
+title: "participation_3"
+output: 
+  flexdashboard::flex_dashboard:
+    storyboard: true
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(shiny)
+library(ballr)
+```
+
+-----------------------------------------------------------------------
+
+*** 
+
+### Top 10 Scoring Big Men 
+
+```{r}
+sznstats_df <- NBAPerGameStatistics(season = 2019)
+
+sznstats_df%>%
+ filter(pos %in% c("C")) %>%
+ top_n(n = 10, pts) %>% 
+distinct() -> top10bigmen_df
+
+ggplot(data = top10bigmen_df, aes(x = pts, y = player, colour = x3pa, size = fta))+
+  geom_point() +
+  ggtitle("Top 10 Scoring Big Men", subtitle = " Points Per Game Compared by 3 Point Attempts and Freethrow Attempts")
+
+```
+
+-----------------------------------------------------------------------
+
+*** 
+
+### Top 10 Scoring Guards 
+
+```{r}
+sznstats_df%>%
+ filter(pos %in% c("PG", "SG")) %>%
+ top_n(n = 10, pts) %>% 
+distinct() -> top10guards_df
+
+ggplot(data = top10guards_df, aes(x = pts, y = player, colour = x3pa, size = fta))+
+  geom_point() +
+  ggtitle("Top 10 Scoring Guards", subtitle = " Points Per Game Compared by 3 Point Attempts and Freethrow Attempts")
+
+```
+
+-----------------------------------------------------------------------
+
+*** 
+
